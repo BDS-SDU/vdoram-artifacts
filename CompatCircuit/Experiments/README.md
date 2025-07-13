@@ -282,8 +282,6 @@ Expected output:
 
 ### 3. Single Party Computation Stage (config-e1-n1)
 
-The first group of experiments, for a single party, may now be executed.
-
 #### Prepare Configuration
 
 Navigate to the primary scripts directory and copy the relevant configuration file.
@@ -431,7 +429,7 @@ bash clear-remote-r1cs.sh
 
 ### 4. Multi Party Computation Stage (config-e1-n2, config-e1-n4)
 
-The procedure for executing the 2-party and 4-party experiments is analogous to the single-party case, with modifications to the configuration file and execution script.
+The procedure for executing the 2-party and 4-party computation stages is analogous to the single-party case, with slight differences in the configuration file and execution script.
 
 #### For 2 Parties (config-e1-n2):
 
@@ -484,7 +482,7 @@ bash clear-remote-r1cs.sh
 
 ### 5. Proving and Verification Stage
 
-The final experiment, E2, is designed to measure the performance of the ZKP setup, proof generation and verification processes.
+This stage is designed to measure the performance of the ZKP setup, proof generation and verification processes.
 
 Navigate to the proving scripts directory.
 
