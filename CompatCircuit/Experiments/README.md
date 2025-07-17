@@ -22,7 +22,10 @@ The procedures outlined herein have been validated on a fresh, minimal installat
 The following command updates the system and installs the required dependencies.
 
 ```bash
-sudo apt update && sudo apt full-upgrade -y && sudo apt install -y nano dotnet-sdk-8.0 build-essential curl tmux tar xz-utils openssh-client git unzip dos2unix jq htop python3 nano
+sudo apt update && sudo apt full-upgrade -y && sudo apt install -y nano dotnet-sdk-8.0 build-essential curl tmux tar xz-utils openssh-client git unzip dos2unix jq htop python3 nano haveged
+
+sudo systemctl enable haveged
+sudo systemctl start haveged
 ```
 
 Note for users in Mainland China: It is advisable to [change the apt source mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/) before executing the command above to improve download speeds.
@@ -572,6 +575,8 @@ All processes started. Waiting 60 sec before checking whether they work...
 [0] Line 8: ··Start:   Generating powers of G
 Successfully start the clients. Waiting for them to exit...
 ```
+
+**Troubleshooting Note:** If you get stuck at `End:     Connecting` for a long time, make sure the `haveged` service is up and running.
 
 The log files `*.stdout` will be generated in the same directory where json files are located. A helper script `print-results.sh` is provided to print the results.
 
