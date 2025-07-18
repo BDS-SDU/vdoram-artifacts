@@ -26,15 +26,22 @@ public class ZkProgramExamplesTest {
 
         IMpcExecutorFactory mpcExecutorFactory = new SingleExecutorFactory();
 
+        int r1csVerifyCount = 0;
+        int expectedR1csVerifyCount = (2 * zkProgramInstance.Opcodes.Count) + 1; // TODO: make it abstract from ZkProgramExecutor implementation
+
         ZkProgramExecutor zkProgramExecutor = new() {
             ZkProgramInstance = zkProgramInstance,
             MyID = 0,
             MpcExecutorFactory = mpcExecutorFactory,
             IsSingleParty = true,
-            OnR1csCircuitWithValuesGenerated = new Progress<(string, R1csCircuitWithValues)>(arg => {
-                (string name, R1csCircuitWithValues r1cs) = arg;
+            OnR1csCircuitWithValuesGeneratedAsync = (string name, R1csCircuitWithValues r1cs) => {
                 r1cs.SelfVerify();
-            }),
+
+                // There might be a time-consuming file writing operation. Simulate it.
+                Thread.Sleep(TimeSpan.FromSeconds(4)); // 4 seconds.
+
+                _ = Interlocked.Increment(ref r1csVerifyCount);
+            },
         };
 
         ZkProgramExecuteResult result = await zkProgramExecutor.Execute();
@@ -44,6 +51,7 @@ public class ZkProgramExamplesTest {
 
         Assert.AreEqual(expectedOutputs.Count, result.PublicOutputs.Count);
         Assert.IsTrue(expectedOutputs.SequenceEqual(result.PublicOutputs));
+        Assert.AreEqual(expectedR1csVerifyCount, r1csVerifyCount);
     }
 
     [TestMethod]

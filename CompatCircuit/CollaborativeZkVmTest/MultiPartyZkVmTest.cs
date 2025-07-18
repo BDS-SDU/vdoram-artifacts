@@ -1,6 +1,5 @@
 ﻿using HuayiQi.CollaborativeZkVm.ZkPrograms;
 using HuayiQi.CollaborativeZkVm.ZkPrograms.Examples;
-using HuayiQi.CompatCircuitCore.CompatCircuits.R1csCircuits;
 using HuayiQi.CompatCircuitCore.Computation;
 using HuayiQi.CompatCircuitCore.Computation.MultiParty;
 using HuayiQi.CompatCircuitCore.Computation.MultiParty.SharedStorages;
@@ -68,7 +67,7 @@ public class MultiPartyZkVmTest {
                 MyID = myID,
                 MpcExecutorFactory = mpcExecutorFactory,
                 IsSingleParty = false,
-                OnR1csCircuitWithValuesGenerated = new Progress<(string, R1csCircuitWithValues)>(),
+                OnR1csCircuitWithValuesGeneratedAsync = (_, _) => { },
             };
             zkProgramExecutors.Add(zkProgramExecutor);
         }

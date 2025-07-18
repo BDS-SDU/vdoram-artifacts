@@ -560,11 +560,10 @@ Command RunMpcZkVmCommand() {
             MyID = mpcConfig.MyID,
             MpcExecutorFactory = mpcExecutorFactory,
             IsSingleParty = false,
-            OnR1csCircuitWithValuesGenerated = new Progress<(string, R1csCircuitWithValues)>(arg => {
-                (string name, R1csCircuitWithValues r1cs) = arg;
+            OnR1csCircuitWithValuesGeneratedAsync = (string name, R1csCircuitWithValues r1cs) => {
                 using Stream stream = File.Open($"{instanceName}.{name}.party{mpcConfig.MyID}.r1cs.json", FileMode.Create, FileAccess.Write);
                 JsonSerializerHelper.Serialize(stream, r1cs, JsonConfig.JsonSerializerOptions);
-            }),
+            },
         };
 
         try {
@@ -675,11 +674,10 @@ Command RunMpcZkVmInThreadCommand() {
                 MpcExecutorFactory = mpcExecutorFactory,
                 IsSingleParty = false,
                 ZkProgramInstance = programInstance,
-                OnR1csCircuitWithValuesGenerated = new Progress<(string, R1csCircuitWithValues)>(arg => {
-                    (string name, R1csCircuitWithValues r1cs) = arg;
+                OnR1csCircuitWithValuesGeneratedAsync = (string name, R1csCircuitWithValues r1cs) => {
                     using Stream stream = File.Open($"{instanceName}.{name}.party{myIDCaptured}.r1cs.json", FileMode.Create, FileAccess.Write);
                     JsonSerializerHelper.Serialize(stream, r1cs, JsonConfig.JsonSerializerOptions);
-                }),
+                },
             };
             zkProgramExecutors.Add(zkProgramExecutor);
         }
