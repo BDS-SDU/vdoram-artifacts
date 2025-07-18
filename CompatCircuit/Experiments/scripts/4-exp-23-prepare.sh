@@ -15,7 +15,7 @@ rm -r -- "$run_dir/exp2files/" || true
     cd -- "$run_dir/bin/"
 
     if [ ! -f ExpConfig.json ]; then
-        echo Please run 'bash 1-exp-1prepare.sh' first.
+        echo Please run 'bash 1-exp-1-prepare.sh' first.
         exit 1
     fi
 
