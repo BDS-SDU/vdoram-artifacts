@@ -43,6 +43,10 @@ public class ExperimentOneExecutor {
         Serilog.Log.Information($"Compiling ZkVmExecutorCircuitCircuit...");
         CircuitBoard zkVmCircuitBoard = new ZkVmExecutorCircuitBoardGenerator().GetCircuitBoard().Optimize();
 
+        Serilog.Log.Information($"Compiling SquaringCircuit...");
+        IReadOnlyList<int> squaringCircuitRepeatCounts = [10, 100, 1000, 10000];
+        IReadOnlyList<CircuitBoard> squaringCircuitBoards = squaringCircuitRepeatCounts.Select(repeat => new SquaringCircuitBoardGenerator() { RepeatCount = repeat }.GetCircuitBoard()).ToList();
+
         void FillRandomInputs(CircuitBoardMpcExecutorWrapper circuitExecutorWrapper, CompatCircuitSymbols compatCircuitSymbols) {
             foreach (CompatCircuitWireSymbol symbol in compatCircuitSymbols.CircuitWireSymbols) {
                 if (symbol.IsPublicInput) {
@@ -69,6 +73,7 @@ public class ExperimentOneExecutor {
         });
 
         // Warm up. Not counted
+        // You can only use the addition circuit to warm up! Otherwise it will cost additional preshared values.
         await RunCircuitBoardWithRandomInputs(additionCircuitBoard, "WarmUp", saveResult: false);
 
         await RunCircuitBoardWithRandomInputs(additionCircuitBoard, $"Addition-{AdditionCircuitBoardGenerator.RepeatCount}");
@@ -76,6 +81,10 @@ public class ExperimentOneExecutor {
         await RunCircuitBoardWithRandomInputs(inversionCircuitBoard, $"Inversion-{InversionCircuitBoardGenerator.RepeatCount}");
         await RunCircuitBoardWithRandomInputs(bitDecompositionCircuitBoard, $"BitDecomposition-{BitDecompositionCircuitBoardGenerator.RepeatCount}");
         await RunCircuitBoardWithRandomInputs(zkVmCircuitBoard, "zkVM-IE");
+
+        for (int i = 0; i < squaringCircuitRepeatCounts.Count; i++) {
+            await RunCircuitBoardWithRandomInputs(squaringCircuitBoards[i], $"SquaringCircuit-{squaringCircuitRepeatCounts[i]}");
+        }
 
         return new ExperimentOneExecuteResult() {
             TotalTime = results.Values.Select(v => v.CircuitExecuteResult.TotalTime).Aggregate(TimeSpan.Zero, (total, next) => total + next),

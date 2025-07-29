@@ -6,7 +6,12 @@ public static class ZkProgramExamples {
         List<IZkProgramExampleGenerator> exampleZkProgramGenerators = [
             new GreaterThanZkProgramGenerator(),
             new ReverseInputProgramGenerator(),
-            new BubbleSortProgramGenerator()];
+            new BubbleSortProgramGenerator(),
+            new EuclideanProgramGenerator(),
+            new FibonacciProgramGenerator(),
+            new RangeQueryProgramGenerator(),
+            new SlidingWindowProgramGenerator(),
+        ];
         Examples = exampleZkProgramGenerators.Select(generator => generator.GetZkProgram()).Select(program => (program.Name, program)).ToDictionary();
     }
 }

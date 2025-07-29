@@ -22,7 +22,7 @@ The procedures outlined herein have been validated on a fresh, minimal installat
 The following command updates the system and installs the required dependencies.
 
 ```bash
-sudo apt update && sudo apt full-upgrade -y && sudo apt install -y nano dotnet-sdk-8.0 build-essential curl tmux tar xz-utils openssh-client git unzip dos2unix jq htop python3 nano haveged
+sudo apt update && sudo apt full-upgrade -y && sudo apt install -y nano dotnet-sdk-8.0 build-essential curl tmux tar xz-utils openssh-client git unzip dos2unix jq htop python3 nano haveged pkg-config libssl-dev
 
 sudo systemctl enable haveged
 sudo systemctl start haveged

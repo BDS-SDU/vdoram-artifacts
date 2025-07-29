@@ -21,6 +21,7 @@ rm -r -- "$run_dir/exp2files/" || true
 
     ./HuayiQi.CollaborativeZkVmExperiment exp-2-gen-zk-program-instance
     ./HuayiQi.CollaborativeZkVmExperiment exp-3-gen-zk-program-instance
+    ./HuayiQi.CollaborativeZkVmExperiment exp-4-gen-zk-program-instance
 )
 
 mkdir -p -- "$run_dir/exp23files/"

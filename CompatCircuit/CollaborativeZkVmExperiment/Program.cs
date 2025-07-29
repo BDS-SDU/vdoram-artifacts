@@ -1,6 +1,7 @@
 ﻿using HuayiQi.CollaborativeZkVm.ZkPrograms;
 using HuayiQi.CollaborativeZkVm.ZkPrograms.Examples;
 using HuayiQi.CollaborativeZkVmExperiment.ExperimentConfigs;
+using HuayiQi.CollaborativeZkVmExperiment.ExperimentFourZkPrograms;
 using HuayiQi.CollaborativeZkVmExperiment.ExperimentOneExecutors;
 using HuayiQi.CollaborativeZkVmExperiment.ExperimentRandomPublicInputGenerators;
 using HuayiQi.CollaborativeZkVmExperiment.ExperimentTwoThreeZkPrograms;
@@ -210,13 +211,19 @@ Command ExperimentOneDistributeFilesCommand() {
 }
 
 Command ExperimentOneRunSinglePartyCommand() {
-    Command command = new("exp-1-run-single", "Run Experiment 1 as single party");
+    Option<bool> repeatPresharedOption = new(name: "--unsafe-repeat-preshared", description: "Repeatly use preshared values. This is extremely unsafe and only meant for debugging or evaluation purpose.", getDefaultValue: () => false) { IsRequired = false };
+
+    Command command = new("exp-1-run-single", "Run Experiment 1 as single party") { repeatPresharedOption };
 
     async Task Handle(InvocationContext invocationContext) {
+        bool repeatPreshared = invocationContext.ParseResult.GetValueForOption(repeatPresharedOption)!;
+
         Serilog.Log.Information("Preparing...");
 
         ICountingEnumerator<Field> publicInputEnumerator = GetPublicInputEnumerator();
-        // TODO: if repeatPreshared, warp publicInputEnumerator with a RepeatingEnumerator
+        if (repeatPreshared) {
+            publicInputEnumerator = new CountingEnumerator<Field>(new RepeatingEnumerator<Field>(publicInputEnumerator));
+        }
 
         IMpcExecutorFactory mpcExecutorFactory = new SingleExecutorFactory();
 
@@ -470,6 +477,38 @@ Command ExperimentTwoGenerateZkProgramInstanceCommand() {
         }
     }
 
+    command.SetHandler(Handle);
+    return command;
+}
+
+Command ExperimentFourGenerateZkProgramInstanceCommand() {
+    Command command = new("exp-4-gen-zk-program-instance", "Generate zero-knowledge program instances for Experiment 4");
+
+    void Handle() {
+        ExperimentConfig expConfig = GetExperimentConfig();
+        int partyCount = expConfig.PartyIPAddresses.Count;
+
+        List<IZkProgramExampleGenerator> programGenerators = [
+            new ExperimentFourZkProgramBubbleSortGenerator(),
+            new ExperimentFourZkProgramFibonacciGenerator(),
+            new ExperimentFourZkProgramIncreasingSubsequenceGenerator(),
+            new ExperimentFourZkProgramRangeQueryGenerator(),
+            new ExperimentFourZkProgramSlidingWindowGenerator(),
+            new ExperimentFourZkProgramBinarySearchGenerator(),
+            new ExperimentFourZkProgramSetIntersecionGenerator()
+        ];
+        Dictionary<string, ZkProgramExample> examples = programGenerators.Select(generator => generator.GetZkProgram()).Select(program => (program.Name, program)).ToDictionary(); ;
+
+        foreach ((_, ZkProgramExample zkProgramExample) in examples) {
+            List<ZkProgramInstance> programInstances = zkProgramExample.GetZkProgramInstances(partyCount);
+
+            for (int partyIndex = 0; partyIndex < partyCount; partyIndex++) {
+                ZkProgramInstance programInstance = programInstances[partyIndex];
+                using Stream stream = File.Open($"{zkProgramExample.CodeName}.instance.{partyIndex}.json", FileMode.Create, FileAccess.Write);
+                JsonSerializerHelper.Serialize(stream, programInstance, JsonConfig.JsonSerializerOptions);
+            }
+        }
+    }
     command.SetHandler(Handle);
     return command;
 }
@@ -807,6 +846,7 @@ try {
         ExperimentOneRunMultiPartyCommand(),
         ExperimentTwoGenerateZkProgramInstanceCommand(),
         ExperimentThreeGenerateZkProgramInstanceCommand(),
+        ExperimentFourGenerateZkProgramInstanceCommand(),
         RunMpcZkVmCommand(),
         RunMpcZkVmInThreadCommand(),
         GeneratePresharedCommand(),

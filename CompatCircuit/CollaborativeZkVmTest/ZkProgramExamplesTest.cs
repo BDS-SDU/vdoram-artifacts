@@ -12,8 +12,7 @@ namespace HuayiQi.CollaborativeZkVmTest;
 [TestClass]
 public class ZkProgramExamplesTest {
     private static async Task TestZkProgramWithMemoryTrace(
-        ZkProgram program, IReadOnlyList<Field> publicInputs, IReadOnlyList<Field> privateInputs, IReadOnlyList<Field> expectedOutputs,
-        int globalStepNoMoreThan, int regCount = 16) {
+        ZkProgram program, IReadOnlyList<Field> publicInputs, IReadOnlyList<Field> privateInputs, IReadOnlyList<Field> expectedOutputs, int globalStepNoMoreThan) {
 
         ZkProgramInstance zkProgramInstance = new() {
             MyID = 0,
@@ -77,6 +76,17 @@ public class ZkProgramExamplesTest {
         List<Field> sortedArray = array.OrderBy(x => x.Value).ToList();
         List<Field> publicInputs = [ArithConfig.FieldFactory.New(array.Count)];
         await TestZkProgramWithMemoryTrace(program, publicInputs, privateInputs: array, expectedOutputs: sortedArray, globalStepNoMoreThan: program.Opcodes.Count * array.Count * array.Count);
+    }
+
+    [TestMethod]
+    public async Task TestDivideByTwoZkProgram() {
+        ZkProgram program = new DivideByTwoProgramGenerator().GetZkProgram();
+        Field input = ArithConfig.FieldFactory.Random();
+        Field expectedOutput = ArithConfig.FieldFactory.New(input.Value / 2);
+        List<Field> publicInputs = [];
+        List<Field> privateInputs = [input];
+        List<Field> expectedOutputs = [expectedOutput];
+        await TestZkProgramWithMemoryTrace(program, publicInputs, privateInputs, expectedOutputs, globalStepNoMoreThan: program.Opcodes.Count);
     }
 
     [TestMethod]
