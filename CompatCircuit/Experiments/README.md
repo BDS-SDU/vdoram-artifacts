@@ -6,6 +6,8 @@ This document provides a comprehensive guide for the evaluation of the accompany
 
 The initial phase involves preparing the evaluation environment.
 
+**Note:** You can also run these experiments in a Docker container on Linux by following the instructions in [README-Docker.md](README-Docker.md), and thereby skip this section.
+
 ### 1. System Requirements
 
 A machine with the following minimum specifications is required:
