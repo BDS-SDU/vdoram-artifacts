@@ -336,7 +336,7 @@ Expected output:
 ```
 You have 10 seconds to recall whether previous experiment is indeed ended. Only run one experiment at the same time. Hit Enter to confirm, Ctrl+C to terminate...
 Warning: Permanently added '127.0.0.1' (ED25519) to the list of known hosts.
-Please manually check whether it's ended by 'bash list-remote-latest-log.sh'. Then, download log files by 'bash download-remote-log.sh'.
+Please manually check whether it's ended by 'bash monitor-remote-latest-log.sh'. Then, download log files by 'bash download-remote-log.sh'.
 ```
 
 #### Monitor for Completion

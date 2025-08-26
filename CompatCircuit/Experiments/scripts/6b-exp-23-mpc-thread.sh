@@ -19,4 +19,4 @@ read -t 10 -p "You have 10 seconds to recall whether previous experiment is inde
 ssh_user_host="${NODE_SSH_USERNAME}@${NODE_IPS[0]}"
 ssh "$ssh_user_host" -- "cd ~/$PROJECT_REMOTE_DIR_NAME/$MPC_NODE_NUM/bin/ && tmux new-session -d 'tmux setw remain-on-exit on; source exp-constants.sh && for ins in "'"${EXP23_INSTANCES[@]}"; do echo ==== $ins ==== && for repeat_index in $(seq 1 '"$EXP_REPEAT_COUNT"'); do INSTANCE_NAME=exp23_mpc_thread."$ins".repeat$repeat_index ./HuayiQi.CollaborativeZkVmExperiment run-mpc-zkvm-thread --program-instance-name $ins'" --unsafe-repeat-preshared; sleep 10; done; done; echo ==== All done ===='"
 
-echo "Please manually check whether it's ended by 'bash list-remote-latest-log.sh'. Then, download log files by 'bash download-remote-log.sh'."
+echo "Please manually check whether it's ended by 'bash monitor-remote-latest-log.sh'. Then, download log files by 'bash download-remote-log.sh'."

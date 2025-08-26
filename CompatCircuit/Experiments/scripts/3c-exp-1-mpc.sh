@@ -38,4 +38,4 @@ if [ "$errors" -gt 0 ]; then
     exit 1
 fi
 
-echo "Please manually check whether it's ended by 'bash list-remote-latest-log.sh'. Then, download log files by 'bash download-remote-log.sh'."
+echo "Please manually check whether it's ended by 'bash monitor-remote-latest-log.sh'. Then, download log files by 'bash download-remote-log.sh'."
