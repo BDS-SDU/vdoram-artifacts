@@ -305,7 +305,7 @@ Expected output:
 ```
 
 
-### 3. Single Party Computation Stage (config-e1-n1)
+### 3. Single Party Computation Stage (config-e1-n1 [~1 hr])
 
 #### Prepare Configuration
 
@@ -452,7 +452,7 @@ bash clear-remote-log.sh
 bash clear-remote-r1cs.sh
 ```
 
-### 4. Multi Party Computation Stage (config-e1-n2, config-e1-n4)
+### 4. Multi Party Computation Stage (config-e1-n2 [~1 hr], config-e1-n4 [~2 hrs])
 
 The procedure for executing the 2-party and 4-party computation stages is analogous to the single-party case, with slight differences in the configuration file and execution script.
 
@@ -505,7 +505,7 @@ bash clear-remote-log.sh
 bash clear-remote-r1cs.sh
 ```
 
-### 5. Proving and Verification Stage
+### 5. Proving and Verification Stage [~20 hrs]
 
 This stage is designed to measure the performance of the ZKP setup, proof generation and verification processes.
 
