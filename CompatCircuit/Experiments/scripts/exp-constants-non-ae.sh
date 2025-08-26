@@ -10,6 +10,7 @@ EXP23_INSTANCES=(
     "exp3_32"
     "exp3_50"
     "exp3_64"
+    "exp4_greater"
     "exp4_fib"
     "exp4_range"
     "exp4_slide"

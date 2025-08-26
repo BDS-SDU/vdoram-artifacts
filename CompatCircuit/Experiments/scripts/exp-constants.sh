@@ -4,6 +4,5 @@ EXP23_INSTANCES=(
     "exp2_3"
     "exp3_4"
     "exp3_16"
-    "exp4_fib"
-    "exp4_range"
+    "exp4_greater"
 )

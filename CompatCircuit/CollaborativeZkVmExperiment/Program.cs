@@ -495,7 +495,8 @@ Command ExperimentFourGenerateZkProgramInstanceCommand() {
             new ExperimentFourZkProgramRangeQueryGenerator(),
             new ExperimentFourZkProgramSlidingWindowGenerator(),
             new ExperimentFourZkProgramBinarySearchGenerator(),
-            new ExperimentFourZkProgramSetIntersecionGenerator()
+            new ExperimentFourZkProgramSetIntersecionGenerator(),
+            new ExperimentFourZkProgramGreaterThanGenerator(),
         ];
         Dictionary<string, ZkProgramExample> examples = programGenerators.Select(generator => generator.GetZkProgram()).Select(program => (program.Name, program)).ToDictionary(); ;
 
