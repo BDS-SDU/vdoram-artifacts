@@ -19,16 +19,36 @@ The procedures outlined herein have been validated on a fresh, minimal installat
 
 ### 2. Basic Dependency Installation
 
+#### Install system packages
 The following command updates the system and installs the required dependencies.
 
 ```bash
 sudo apt update && sudo apt full-upgrade -y && sudo apt install -y nano dotnet-sdk-8.0 build-essential curl tmux tar xz-utils openssh-client git unzip dos2unix jq htop python3 nano haveged pkg-config libssl-dev
+```
 
+Note for users in Mainland China: It is advisable to [change the apt source mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/) before executing the command above to improve download speeds.
+
+#### Enable haveged service
+
+```bash
 sudo systemctl enable haveged
 sudo systemctl start haveged
 ```
 
-Note for users in Mainland China: It is advisable to [change the apt source mirror](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/) before executing the command above to improve download speeds.
+If the `haveged` service fails to launch, you will need to run it in the background using the following `tmux` command.
+```bash
+tmux new-session -d -s haveged_session 'haveged -F'
+```
+
+#### Install SSH server
+
+If you don't have an SSH server installed, you'll need to run the following commands to install and enable it:
+
+```bash
+sudo apt update && sudo apt install -y openssh-server
+sudo systemctl enable ssh
+sudo systemctl start ssh
+```
 
 ### 3. Rust Nightly Toolchain Installation
 
