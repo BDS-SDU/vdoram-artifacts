@@ -15,13 +15,13 @@ Follow these steps to install the necessary dependencies:
 
 #### Install .NET SDK 8.0
 Download and install the .NET SDK 8.0 for macOS (ARM64):
-- Visit [this link](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.315-macos-arm64-installer) to download the installer.
+- Visit [this link](https://dotnet.microsoft.com/download/) to download the installer. Please make sure you are downloading the *8.0* SDK, regardless of whether there is a newer version.
 - Follow the installation instructions provided by the installer.
 
 #### Install Rust Nightly
 Install the Rust nightly toolchain using `rustup`:
 ```sh
-curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
+curl --proto '=https' https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
 ```
 After installation, run the following to apply environment variables:
 ```sh
