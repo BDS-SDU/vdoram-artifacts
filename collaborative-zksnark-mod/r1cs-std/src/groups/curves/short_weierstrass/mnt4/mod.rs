@@ -316,7 +316,7 @@ impl<P: MNT4Parameters> G2PreparedVar<P> {
                     r = r2;
                 }
 
-                tmp >>= 1;
+                // tmp >>= 1;
             }
         }
 
