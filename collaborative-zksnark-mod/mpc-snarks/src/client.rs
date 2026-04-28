@@ -59,6 +59,8 @@ arg_enum! {
         PcTwoCom,
         Plonk,
         PolyDiv,
+        PlonkSquaringLocal,
+        PlonkSquaringMultiParty,
         PlonkCompatCircuitLocal,
         PlonkCompatCircuitMultiParty,
     }
@@ -75,6 +77,8 @@ enum ComputationDomain {
     PolyField,
     BlsPairingCompatCircuitMultiParty,
     BlsPairingCompatCircuitLocal,
+    BlsPairingSquaringMultiParty,
+    BlsPairingSquaringLocal,
 }
 
 #[derive(Debug, StructOpt)]
@@ -134,6 +138,8 @@ impl Opt {
             | Computation::MarlinPc
             | Computation::MarlinPcBatch => ComputationDomain::BlsPairing,
             Computation::PolyEval => ComputationDomain::PolyField,
+            Computation::PlonkSquaringLocal => ComputationDomain::BlsPairingSquaringLocal,
+            Computation::PlonkSquaringMultiParty => ComputationDomain::BlsPairingSquaringMultiParty,
             Computation::PlonkCompatCircuitLocal => ComputationDomain::BlsPairingCompatCircuitLocal,
             Computation::PlonkCompatCircuitMultiParty => {
                 ComputationDomain::BlsPairingCompatCircuitMultiParty
@@ -204,6 +210,19 @@ impl Computation {
             c => unimplemented!("Cannot run_bls_compat_circuit {:?}", c),
         }
     }
+
+    fn run_bls_squaring(&self, n_iters: usize) {
+        match self {
+            Computation::PlonkSquaringLocal => {
+                plonk::local_test_prove_and_verify(n_iters);
+            }
+            Computation::PlonkSquaringMultiParty => {
+                plonk::mpc_test_prove_and_verify(n_iters);
+            }
+            c => unimplemented!("Cannot run_bls_squaring {:?}", c),
+        }
+    }
+
     fn run_bls(&self, inputs: Vec<MFr>) -> Vec<MFr> {
         let outputs: Vec<MFr> = match self {
             Computation::Groth16 => {
@@ -922,8 +941,13 @@ fn main() -> () {
     } else if opt.domain() == ComputationDomain::BlsPairingCompatCircuitLocal
         || opt.domain() == ComputationDomain::BlsPairingCompatCircuitMultiParty
     {
-        let path = opt.args[0].clone();
+        let path = opt.args.first().expect("Missing argument: compat_circuit_json_path").clone();
         opt.computation.run_bls_compat_circuit(path.as_str());
+    } else if opt.domain() == ComputationDomain::BlsPairingSquaringLocal
+        || opt.domain() == ComputationDomain::BlsPairingSquaringMultiParty
+    {
+        let n_iters = opt.args.first().expect("Missing argument: n_iters").parse::<usize>().expect("First argument must be a valid integer representing n_iters");
+        opt.computation.run_bls_squaring(n_iters);
     } else {
         let inputs = opt
             .args
